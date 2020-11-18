@@ -1,108 +1,142 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+    <el-row :gutter="20">
+      <el-col :span="10" style="padding-right: 0px;">
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left" style="background-color:white;height:600px;margin-top:150px;float: right;">
 
-      <div class="title-container">
-        <h3 class="title">Login Form</h3>
-      </div>
+          <div class="title-container">
+            <h4 class="title">Login</h4>
+          </div>
+          <div style="padding: 50px;">
+            <el-form-item prop="username">
+              <span class="svg-container">
+                <svg-icon icon-class="user" />
+              </span>
+              <el-input
+                ref="username"
+                v-model="loginForm.username"
+                placeholder="Username"
+                name="username"
+                type="text"
+                tabindex="1"
+                autocomplete="on"
+              />
+            </el-form-item>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
+            <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+              <el-form-item prop="password">
+                <span class="svg-container">
+                  <svg-icon icon-class="password" />
+                </span>
+                <el-input
+                  :key="passwordType"
+                  ref="password"
+                  v-model="loginForm.password"
+                  :type="passwordType"
+                  placeholder="Password"
+                  name="password"
+                  tabindex="2"
+                  autocomplete="on"
+                  @keyup.native="checkCapslock"
+                  @blur="capsTooltip = false"
+                  @keyup.enter.native="handleLogin"
+                />
+                <span class="show-pwd" @click="showPwd">
+                  <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+                </span>
+              </el-form-item>
+            </el-tooltip>
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-link type="primary" style="font-size: 15px;" @click="$refs.pass.dialog = true">FORGET PASSWORD</el-link>
+              </el-col>
+              <el-col :span="12">
+                <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;height: 50px;float: right" @click.native.prevent="handleLogin">Login</el-button>
+              </el-col>
+            </el-row>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+          </div>
+          <el-row :gutter="20">
+            <el-col :span="24" style="text-align: center;margin-top: 150px;">
+              TEL:400-921-5988
+            </el-col>
+          </el-row>
+        </el-form>
+      </el-col>
+      <el-col :span="14" style="padding-left: 0px">
+        <div style="color: black;margin-top: 150px;height: 600px;width: 1000px;background-size: 100% 100%;padding: 30px;" :style="{backgroundImage:'url('+require('../../assets/bg.jpg')+')'}">
+          <el-row>
+            <el-col :span="2">
+              <el-image
+                :src="require('@/assets/IMG_2958.png')"
+                fit="fill"
+                class="icon-left"
+              />
+            </el-col>
+            <el-col :span="22">
+              <el-link :underline="false" class="list-content" @click="previewFile('关于发票与就诊日期不一致的说明.pdf')">1. FAQs</el-link>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="2">
+              <el-image
+                :src="require('@/assets/IMG_2957.png')"
+                fit="fill"
+                class="icon-left"
+              />
+            </el-col>
+            <el-col :span="22">
+              <el-link :underline="false" class="list-content" @click="download('Bilingual DB Claim Form.pdf')">2. Download Direct Billing Claim Form</el-link>
+            </el-col>
+          </el-row>
+          <el-row>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>Username : admin</span>
-          <span>Password : any</span>
+            <el-col :span="2">
+              <el-image
+                :src="require('@/assets/IMG_2957.png')"
+                fit="fill"
+                class="icon-left"
+              />
+            </el-col>
+            <el-col :span="22">
+              <el-link :underline="false" class="list-content" @click="download('Bilingual PA Request Form.pdf')">3. Download Pre-authorization Request Form</el-link>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="2">
+              <el-image
+                :src="require('@/assets/IMG_2957.png')"
+                fit="fill"
+                class="icon-left"
+              />
+            </el-col>
+            <el-col :span="22">
+              <el-link :underline="false" class="list-content" @click="download('关于发票与就诊日期不一致的说明.pdf')">4. Download Receipt Explanation Form</el-link>
+            </el-col>
+          </el-row>
         </div>
-        <div class="tips">
-          <span style="margin-right:18px;">Username : editor</span>
-          <span>Password : any</span>
-        </div>
-
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          Or connect with
-        </el-button>
-      </div>
-    </el-form>
-
-    <el-dialog title="Or connect with" :visible.sync="showDialog">
-      Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
-      <social-sign />
-    </el-dialog>
+      </el-col>
+    </el-row>
+    <updatePass ref="pass" />
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import SocialSign from './components/SocialSignin'
-
+import updatePass from './components/updatePass'
+import { download } from '@/api/user'
 export default {
   name: 'Login',
-  components: { SocialSign },
+  components: { updatePass },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
         password: '111111'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: 'blur' }],
+        password: [{ required: true, trigger: 'blur' }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -177,25 +211,20 @@ export default {
         }
         return acc
       }, {})
+    },
+    previewFile(filename) {
+      download(filename).then(response => {
+        const binaryData = []
+        binaryData.push(response)
+        this.pdfUrl = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }))
+        window.open(this.pdfUrl)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    download(filename) {
+      window.location.href = '/aya/common/file/download?fileName=' + filename
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
@@ -210,7 +239,7 @@ $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
-    color: $cursor;
+    color: black;
   }
 }
 
@@ -227,7 +256,7 @@ $cursor: #fff;
       -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: black;
       height: 47px;
       caret-color: $cursor;
 
@@ -239,16 +268,35 @@ $cursor: #fff;
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid black;
     border-radius: 5px;
     color: #454545;
+  }
+
+  .el-input__inner::placeholder {
+    color: black;
+    text-align:center;
+  }
+  /* 谷歌 */
+  .el-input__inner::-webkit-input-placeholder {
+    color: black;
+    text-align:center;
+  }
+  /* 火狐 */
+  .el-input__inner:-moz-placeholder {
+    color: black;
+    text-align:center;
+  }
+  /*ie*/
+  .el-input__inner:-ms-input-placeholder {
+    color: black;
+    text-align:center;
   }
 }
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#D3D3D3;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
@@ -262,7 +310,7 @@ $light_gray:#eee;
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    //padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -289,13 +337,15 @@ $light_gray:#eee;
 
   .title-container {
     position: relative;
+    background-color: red;
 
     .title {
       font-size: 26px;
       color: $light_gray;
       margin: 0px auto 40px auto;
-      text-align: center;
+      text-align: left;
       font-weight: bold;
+      padding: 6px;
     }
   }
 
@@ -319,6 +369,22 @@ $light_gray:#eee;
     .thirdparty-button {
       display: none;
     }
+  }
+  .list-content{
+    padding: 10px;
+    font-size: 20px;
+    font-family: Cursive;
+    margin-top: 50px;
+    margin-left: 20px;
+    color: white;
+    width: 450px;
+    display:inline-block;
+    text-decoration: underline;
+  }
+  .icon-left{
+    float: right;
+    width: 60px;
+    margin-top: 40px;
   }
 }
 </style>

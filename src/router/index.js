@@ -73,52 +73,44 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/claim-record'
+  },
+  {
+    path: '/claim-record',
+    component: Layout,
+    redirect: '/claim-record/ClaimIndex',
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        path: 'ClaimIndex',
+        component: () => import('@/views/claim-record/index'),
+        name: 'Claim record',
+        meta: { title: 'Claim record', icon: 'list', affix: true }
       }
     ]
   },
   {
-    path: '/documentation',
+    path: '/policy-list',
     component: Layout,
+    redirect: '/policy-list/PolicyIndex',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
+        path: 'PolicyIndex',
+        component: () => import('@/views/policy-list/index'),
+        name: 'Policy list',
+        meta: { title: 'Policy list', icon: 'list' }
       }
     ]
   },
   {
-    path: '/guide',
+    path: '/pre-auth-record',
     component: Layout,
-    redirect: '/guide/index',
+    redirect: '/pre-auth-record/PreAuthIndex',
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'Guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        path: 'PreAuthIndex',
+        component: () => import('@/views/pre-auth-record/index'),
+        name: 'Pre-authorization record',
+        meta: { title: 'Pre-authorization record', icon: 'list' }
       }
     ]
   }
@@ -390,6 +382,8 @@ export const asyncRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  base: '/aya_admin/',
+  mode: 'history',
   routes: constantRoutes
 })
 
